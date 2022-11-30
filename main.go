@@ -1,7 +1,7 @@
 package main
 
 import (
-	"server"
+	"github.com/arvianlimansyah/moonlay-test/server"
 )
 
 func main() {
