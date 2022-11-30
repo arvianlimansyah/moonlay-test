@@ -6,7 +6,8 @@ import (
 	"os"
 
 	"github.com/arvianlimansyah/moonlay-test/logger"
-	// "github.com/arvianlimansyah/moonlay-test/models"
+	"github.com/arvianlimansyah/moonlay-test/models"
+	"github.com/arvianlimansyah/moonlay-test/router"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -23,9 +24,9 @@ var (
 func Run() {
 	// godotenv.Load()
 	logger.InitLogger()
-	// routes.Run()
+	e := router.New()
+	e.Logger.Fatal(e.Start(":8000"))
 
-	fmt.Println("Test")
 }
 
 func init() {
@@ -51,14 +52,10 @@ func init() {
 		return
 	}
 
-	fmt.Println("++++++++++++++++++ TEST ++++++++++++++++++++")
-
 	app.DB = database
-
 	logger.Log("auto-migrations running...")
-	// database.AutoMigrate(&models.Task{})
-	// database.AutoMigrate(&models.Subtask{})
+	database.AutoMigrate(&models.Task{})
+	database.AutoMigrate(&models.Subtask{})
 	logger.Log("auto-migration complete...")
-	// database.AutoMigrateDB(app.DB)
 
 }

@@ -25,3 +25,7 @@ type TaskWithSubtask struct {
 	Attachment  string    `json:"attachment"`
 	Subtasks    []Subtask `json:"subtasks"`
 }
+
+type HealthCheckResponse struct {
+	Message string `json:"message"`
+}
