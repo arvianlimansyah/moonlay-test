@@ -7,18 +7,10 @@ import (
 	"strings"
 	"time"
 
-	// "github.com/joho/godotenv"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 )
 
 func InitLogger() {
-	// err := godotenv.Load(".env")
-	// if err != nil {
-	// 	fmt.Println(err)
-	// 	log.Fatalf("Error loading .env file")
-	// 	return
-	// }
-
 	logFolder := os.Getenv("LOG_FOLDER")
 	appName := os.Getenv("APP_NAME")
 	pwd, err := os.Getwd()

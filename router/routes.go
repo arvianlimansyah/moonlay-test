@@ -7,15 +7,7 @@ import (
 func New() *echo.Echo {
 	// create a new echo instance
 	e := echo.New()
-
-	// //create groups
-	// adminGroup := e.Group("/admin")
-
-	// //set all middlewares
 	e.Use(serverHeader)
-	// middlewares.SetAdminMiddlewares(adminGroup)
-
-	//set main routes
 	MainGroup(e)
 
 	return e
@@ -29,10 +21,21 @@ func serverHeader(next echo.HandlerFunc) echo.HandlerFunc {
 }
 
 func MainGroup(e *echo.Echo) {
+	var app dbConnection
+
 	// Route / to handler function
 	e.GET("/health-check", HealthCheck)
 
-	// e.GET("/cats/:data", HealthCheck)
-	// e.POST("/cats", handlers.AddCat)
+	e.GET("/task/:data", app.GetTask)
+	e.GET("/task-all", app.GetAllTask)
+	e.GET("/task-subtask/:data", app.GetTaskWithSubtask)
+	e.POST("/task-create", app.CreateTask)
+	e.POST("/task-update", app.UpdateTask)
+	e.GET("/task-delete/:data", app.DeleteTask)
+
+	e.GET("/subtask/:data", app.GetSubtask)
+	e.POST("/subtask-create", app.CreateSubtask)
+	e.POST("/subtask-update", app.UpdateSubtask)
+	e.GET("/subtask-delete/:data", app.DeleteSubtask)
 
 }
