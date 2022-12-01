@@ -7,15 +7,9 @@ import (
 
 	"github.com/arvianlimansyah/moonlay-test/models"
 	"github.com/labstack/echo"
-	"gorm.io/gorm"
 )
 
-type dbConnection struct {
-	DB *gorm.DB
-}
-
-// HealthCheck - Health Check Handler
-func HealthCheck(c echo.Context) error {
+func (dbc *dbConnection) HealthCheck(c echo.Context) error {
 	resp := models.HealthCheckResponse{
 		Message: "Everything is good!",
 	}
@@ -81,7 +75,16 @@ func (dbc *dbConnection) CreateTask(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error)
 	}
 
-	dbc.DB.Create(&task)
+	if task.Attachment == "" {
+		task.Attachment = "-"
+	}
+
+	err = dbc.DB.Create(&task).Error
+	if err != nil {
+		log.Fatalf("Failed creating request body %s", err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error)
+	}
+
 	return c.JSON(http.StatusOK, task)
 }
 
@@ -140,6 +143,10 @@ func (dbc *dbConnection) CreateSubtask(c echo.Context) error {
 	if err != nil {
 		log.Fatalf("Failed reading the request body %s", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error)
+	}
+
+	if subtask.Attachment == "" {
+		subtask.Attachment = "-"
 	}
 
 	dbc.DB.Create(&subtask)

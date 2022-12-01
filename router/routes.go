@@ -1,11 +1,22 @@
 package router
 
 import (
+	"github.com/arvianlimansyah/moonlay-test/utils"
 	"github.com/labstack/echo"
+	"gorm.io/gorm"
+)
+
+type dbConnection struct {
+	DB *gorm.DB
+}
+
+var (
+	globalConn dbConnection
 )
 
 func New() *echo.Echo {
-	// create a new echo instance
+	conn := utils.ConnectDB()
+	globalConn.DB = conn
 	e := echo.New()
 	e.Use(serverHeader)
 	MainGroup(e)
@@ -21,10 +32,10 @@ func serverHeader(next echo.HandlerFunc) echo.HandlerFunc {
 }
 
 func MainGroup(e *echo.Echo) {
-	var app dbConnection
+	app := globalConn
 
 	// Route / to handler function
-	e.GET("/health-check", HealthCheck)
+	e.GET("/health-check", app.HealthCheck)
 
 	e.GET("/task/:data", app.GetTask)
 	e.GET("/task-all", app.GetAllTask)
