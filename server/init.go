@@ -6,7 +6,6 @@ import (
 )
 
 func Run() {
-	utils.ConnectDB()
 	utils.InitLogger()
 	e := router.New()
 	e.Logger.Fatal(e.Start(":8000"))
